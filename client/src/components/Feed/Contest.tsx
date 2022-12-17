@@ -11,7 +11,7 @@ const Contests = () => {
         const provider = new ethers.providers.Web3Provider(ethereum as any)
         const signer = provider.getSigner()
         const contract = new ethers.Contract(
-          "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+          process.env.REACT_APP_CONTEST_CONTRACT_ADDRESS || "",
           ContestD.abi,
           signer
         )

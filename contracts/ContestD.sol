@@ -7,6 +7,7 @@ contract ContestD {
         uint256 endTime;
         string name;
         address creator;
+        string desc;
     }
 
     struct ContestDonation{
@@ -15,18 +16,18 @@ contract ContestD {
         string playbackId;
     }
 
-    mapping(string => string[]) contestVideos;
+    mapping(string => string[]) public contestVideos;
 
-    Contest[] allContests;
-    mapping(string => ContestDonation[]) allContestsDonations;
+    Contest[] public allContest;
+    mapping(string => ContestDonation[]) public allContestsDonations;
     
     //temporary
-    mapping(string => ContestDonation[]) contestEndMap;
+    mapping(string => ContestDonation[]) public contestEndMap;
 
-    function createContest(string calldata startTime, uint duration,string calldata name) public{
+    function createContest(string calldata startTime, uint256 duration,string calldata name,string calldata desc) public{
         uint256 endTime = block.timestamp + duration*60;
-        Contest memory cont = Contest(startTime,endTime,name,msg.sender);
-        allContests.push(cont);
+        Contest memory cont = Contest(startTime,endTime,name,msg.sender,desc);
+        allContest.push(cont);
     }
 
     function addVideosInContest(string calldata playbackId,string calldata contestName) public {
@@ -38,19 +39,19 @@ contract ContestD {
     } 
     
     function fetchAllContests() public view returns(Contest[] memory){
-        return allContests;
+        return allContest;
     }
 
     function stakeInContest(string calldata key,string calldata contestName) payable public {
         ContestDonation memory contD =  ContestDonation(payable(msg.sender),msg.value,key);
-        allContestsDonations[contestName].push(contD); 
+        allContestsDonations[contestName].push(contD);
     }
 
     function fetchContestDonations(string calldata name) public view returns(ContestDonation[] memory){
         string memory contName;
-        for(uint i=0;i<allContests.length;i++){
-            if(keccak256(abi.encodePacked(name))==keccak256(abi.encodePacked(allContests[i].name))){
-                contName = allContests[i].name;
+        for(uint i=0;i<allContest.length;i++){
+            if(keccak256(abi.encodePacked(name))==keccak256(abi.encodePacked(allContest[i].name))){
+                contName = allContest[i].name;
             }
         }
         ContestDonation[] memory contDonations = allContestsDonations[contName];
@@ -79,9 +80,9 @@ contract ContestD {
 
     function releaseFunds(string calldata contestName) public payable{
         Contest memory cont;
-        for(uint i=0;i<allContests.length;i++){
-            if(keccak256(abi.encodePacked(contestName))==keccak256(abi.encodePacked(allContests[i].name))){
-                cont= allContests[i];
+        for(uint i=0;i<allContest.length;i++){
+            if(keccak256(abi.encodePacked(contestName))==keccak256(abi.encodePacked(allContest[i].name))){
+                cont= allContest[i];
             }
         }
         // require(block.timestamp >= cont.endTime,"Contest is Live");

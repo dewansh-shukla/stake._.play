@@ -6,7 +6,7 @@ const main = async () => {
 
     const [owner, addr1, addr2, addr3] = await hre.ethers.getSigners();
 
-    let txn = await contestContract.createContest("1","6","cona");
+    let txn = await contestContract.createContest("1","6","cona","desc");
     await txn.wait();
 
     txn = await contestContract.connect(addr1).stakeInContest("a","cona", {value: hre.ethers.utils.parseEther("0.1")});
@@ -39,6 +39,9 @@ const main = async () => {
     txn = await contestContract.getVideosInContest("cona");
     
     console.log("Videos in contest", txn);
+
+    txn = await contestContract.fetchAllContests();
+    console.log("All Contests", txn);
 }
 
 const runMain = async () => {

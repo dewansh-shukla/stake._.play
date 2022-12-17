@@ -23,7 +23,8 @@ const ContestCreator = () => {
         const contest = await contract.createContest(
           startTime,
           duration,
-          contestName
+          contestName,
+          "description"
         )
         console.log("Contest created")
       }
