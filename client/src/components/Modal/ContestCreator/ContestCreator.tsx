@@ -1,4 +1,10 @@
+import { useState,useEffect } from "react";
+import ContestD from "../../../../../artifacts/contracts/ContestD.sol/ContestD.json";
+
+
 const ContestCreator = () => {
+
+
   return (
     <>
       <input type='checkbox' id='createContest' className='modal-toggle' />
