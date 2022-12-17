@@ -17,6 +17,30 @@ type Props = {
 const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
   const [donationAmount, setDonationAmount] = useState<Number>(0)
   const [comment, setComment] = useState<string>("")
+  const [allDonations, setAllDonations] = useState<any>()
+
+  const getDonations = async () => {
+    try {
+      const { ethereum } = window
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum as any)
+        const signer = provider.getSigner()
+        const contract = new ethers.Contract(
+          process.env.REACT_APP_STREAM_ADDRESS || "",
+          ContractAbi.abi,
+          signer
+        )
+        const donations = await contract.getDonations(
+          (playbackInfo as any)?.key
+        )
+        setAllDonations(donations)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const handleDonation = async () => {
     try {
       const { ethereum } = window
@@ -53,6 +77,10 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
     },
     []
   )
+
+  useEffect(() => {
+    getDonations()
+  }, [])
   return (
     <>
       <div className='w-full mt-4 mb-4 flex flex-col justify-center border-2  border-violet-500 rounded-b-2xl '>
@@ -65,7 +93,59 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
           <label htmlFor='showDonations' className='flex items-center btn'>
             Show Donations <FaDonate className='ml-3' />
           </label>
-          <ShowDonations playbackId={(playbackInfo as any)?.key} />
+          {/* Donation Model start here */}
+          <input type='checkbox' id='showDonations' className='modal-toggle' />
+          <div className='modal'>
+            <div className='modal-box relative'>
+              <label
+                htmlFor='showDonations'
+                className='btn btn-sm btn-circle absolute right-2 top-2'
+              >
+                ✕
+              </label>
+              <h3 className='text-lg font-bold'>Donations</h3>
+              <p className='py-4'>
+                {allDonations ? (
+                  allDonations.map((item: any, index: any) => {
+                    return (
+                      <>
+                        <div className='flex justify-center items-center'>
+                          <div>
+                            <p
+                              className='btn flex full justify-end mt-2 mb-2 tooltip '
+                              data-tip={(item as any)?.client.slice(0, 20)}
+                            >
+                              Donor:
+                              {(item as any)?.client.slice(0, 12) + `...`}
+                              <ImCopy
+                                className='font-white'
+                                onClick={() =>
+                                  navigator.clipboard.writeText(
+                                    (item as any)?.client
+                                  )
+                                }
+                              />
+                            </p>
+                          </div>
+                          <p className='m-2 flex items-center'>
+                            <BsCurrencyDollar />
+                            <span>
+                              {(
+                                (item as any)?.amount / Math.pow(10, 18)
+                              )?.toString()}
+                            </span>
+                          </p>
+                          <p className='m-2'>{(item as any)?.message}</p>
+                        </div>
+                      </>
+                    )
+                  })
+                ) : (
+                  <div>No donations</div>
+                )}
+              </p>
+            </div>
+          </div>
           <p
             className='btn flex full justify-end mt-2 mb-2 tooltip '
             data-tip={(playbackInfo as any)?.creator.slice(0, 20)}
@@ -120,91 +200,3 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
   )
 }
 export default VideoPlayer
-
-interface DonationProps {
-  playbackId: string
-}
-
-const ShowDonations: FC<DonationProps> = ({ playbackId }) => {
-  const [allDonations, setAllDonations] = useState<any>()
-  console.log("all donations", allDonations)
-  const getDonations = async () => {
-    try {
-      const { ethereum } = window
-
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum as any)
-        const signer = provider.getSigner()
-        const contract = new ethers.Contract(
-          process.env.REACT_APP_STREAM_ADDRESS || "",
-          ContractAbi.abi,
-          signer
-        )
-        const donations = await contract.getDonations(playbackId)
-        setAllDonations(donations)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    getDonations()
-  }, [])
-  return (
-    <>
-      <input type='checkbox' id='showDonations' className='modal-toggle' />
-      <div className='modal'>
-        <div className='modal-box relative'>
-          <label
-            htmlFor='showDonations'
-            className='btn btn-sm btn-circle absolute right-2 top-2'
-          >
-            ✕
-          </label>
-          <h3 className='text-lg font-bold'>Donations</h3>
-          <p className='py-4'>
-            {allDonations ? (
-              allDonations.map((item: any, index: any) => {
-                return (
-                  <>
-                    <div className='flex justify-center items-center'>
-                      <div>
-                        <p
-                          className='btn flex full justify-end mt-2 mb-2 tooltip '
-                          data-tip={(item as any)?.client.slice(0, 20)}
-                        >
-                          Donor:
-                          {(item as any)?.client.slice(0, 12) + `...`}
-                          <ImCopy
-                            className='font-white'
-                            onClick={() =>
-                              navigator.clipboard.writeText(
-                                (item as any)?.client
-                              )
-                            }
-                          />
-                        </p>
-                      </div>
-                      <p className='m-2 flex items-center'>
-                        <BsCurrencyDollar />
-                        <span>
-                          {(
-                            (item as any)?.amount / Math.pow(10, 18)
-                          )?.toString()}
-                        </span>
-                      </p>
-                      <p className='m-2'>{(item as any)?.message}</p>
-                    </div>
-                  </>
-                )
-              })
-            ) : (
-              <>"No Donations"</>
-            )}
-          </p>
-        </div>
-      </div>
-    </>
-  )
-}
