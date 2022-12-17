@@ -31,10 +31,16 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
           ContractAbi.abi,
           signer
         )
+        
+        console.log((playbackInfo as any)?.key);
         const donations = await contract.getDonations(
           (playbackInfo as any)?.key
         )
+        console.log(donations);
+
+
         setAllDonations(donations)
+        console.log("allDonations",allDonations);
       }
     } catch (error) {
       console.log(error)
