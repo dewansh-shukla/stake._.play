@@ -7,6 +7,7 @@ import { FaDonate } from "react-icons/fa"
 import { BsCurrencyDollar } from "react-icons/bs"
 import { FiRefreshCcw } from "react-icons/fi"
 import ContestD from "../../utils/contestABI.json"
+import PrayingFrog from "../../assets/images/PrayingFrog.png"
 interface PlaybackInfo {
   0: string
   1: string
@@ -139,7 +140,7 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
     <>
       <div className='w-full mt-4 mb-4 flex flex-col justify-center border-2  border-violet-500 rounded-b-2xl '>
         <Player
-          title='Title Video'
+          title='Video title'
           playbackId={(playbackInfo as any)?.key}
           showPipButton
         />
@@ -266,7 +267,10 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
                     )
                   })
                 ) : (
-                  <div>No donations</div>
+                  <div className='flex w-full flex-col items-center justify-center'>
+                    <p className='text-center'>No Donations Yet!!</p>
+                    <img src={PrayingFrog} width={150} height={150} />
+                  </div>
                 )}
               </p>
             </div>

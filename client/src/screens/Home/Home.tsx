@@ -28,7 +28,7 @@ const Home = () => {
         <Navbar />
         <Layout>
           {location.pathname === "/home" ? (
-            <div className='w-full flex flex-col justify-center mt-2'>
+            <div className='w-full flex  flex-col  justify-center mt-2'>
               <div className='w-full flex justify-center'>
                 <div className='tabs tabs-boxed  flex justify-center '>
                   <a
