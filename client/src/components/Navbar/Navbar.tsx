@@ -33,7 +33,7 @@ const Navbar: FC = () => {
           '
           style={{ backgroundColor: "#171616" }}
         >
-          <p className='text-2xl  font-extrabold md:ml-10'>Play_ Earn</p>
+          <p className='text-2xl  font-extrabold md:ml-10'>Stake._.play</p>
           <div className='hidden w-1/4 md:flex flex-row justify-evenly '>
             <label htmlFor='uploadVideo' className='btn m-2 bg-black'>
               Upload Video

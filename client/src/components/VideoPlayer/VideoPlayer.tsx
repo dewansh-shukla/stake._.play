@@ -6,6 +6,7 @@ import { ImCopy } from "react-icons/im"
 import { FaDonate } from "react-icons/fa"
 import { BsCurrencyDollar } from "react-icons/bs"
 import { FiRefreshCcw } from "react-icons/fi"
+import ContestD from "../../utils/contestABI.json"
 interface PlaybackInfo {
   0: string
   1: string
@@ -19,6 +20,7 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
   const [donationAmount, setDonationAmount] = useState<Number>(0)
   const [comment, setComment] = useState<string>("")
   const [allDonations, setAllDonations] = useState<any>()
+  const [allContest, setAllContest] = useState<any>()
 
   const [refresh, setRefresh] = useState<boolean>(false)
   const getDonations = async () => {
@@ -86,6 +88,53 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
     getDonations()
   }, [refresh])
 
+  const getAllContest = async () => {
+    try {
+      const { ethereum } = window
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum as any)
+        const signer = provider.getSigner()
+        const contract = new ethers.Contract(
+          process.env.REACT_APP_CONTEST_CONTRACT_ADDRESS || "",
+          ContestD.abi,
+          signer
+        )
+
+        const contests = await contract.fetchAllContests()
+        setAllContest(contests)
+        console.log("allContest", allContest)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    getAllContest()
+  }, [])
+
+  const handleJoinContest = async (name: string) => {
+    try {
+      const { ethereum } = window
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum as any)
+        const signer = provider.getSigner()
+        const contract = new ethers.Contract(
+          process.env.REACT_APP_CONTEST_CONTRACT_ADDRESS || "",
+          ContestD.abi,
+          signer
+        )
+        console.log((playbackInfo as any)?.key, name)
+        const tx = await contract.addVideosInContest(
+          (playbackInfo as any)?.key,
+          name
+        )
+        await tx.wait()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <>
       <div className='w-full mt-4 mb-4 flex flex-col justify-center border-2  border-violet-500 rounded-b-2xl '>
@@ -108,6 +157,27 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
               }
             />
           </p>
+          {/* dropdown starts */}
+          <div className='dropdown dropdown-hover w-1/3'>
+            <label tabIndex={0} className='btn m-1 w-full'>
+              Contests
+            </label>
+            <ul
+              tabIndex={0}
+              className='dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52'
+            >
+              {allContest?.map((contest: any, index: any) => {
+                return (
+                  <li key={index}>
+                    <a onClick={() => handleJoinContest(contest?.name)}>
+                      {contest?.name}
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+          {/* dropdown ends */}
         </div>
         <div className='flex flex-col w-full justify-center items-center p-2'>
           {/* Accordion  */}
@@ -160,8 +230,8 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
                 <FiRefreshCcw className='ml-2 mt-1' />
               </div>
               <p className='py-4'>
-                {allDonations ? (
-                  allDonations.map((item: any, index: any) => {
+                {allDonations?.length !== 0 ? (
+                  allDonations?.map((item: any, index: any) => {
                     return (
                       <>
                         <div className='flex justify-center items-center'>
@@ -201,8 +271,6 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
               </p>
             </div>
           </div>
-
-          {/* Show Donations End */}
         </div>
       </div>
     </>
