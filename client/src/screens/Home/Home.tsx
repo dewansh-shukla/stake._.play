@@ -57,7 +57,7 @@ const Home = () => {
         {/* Modals here */}
         <UploadVideo />
         <StreamVideo />
-        <CreateContest />
+        {/* <CreateContest /> */}
       </div>
     </>
   )

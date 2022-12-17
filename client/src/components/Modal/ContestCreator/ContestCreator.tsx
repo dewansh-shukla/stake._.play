@@ -1,9 +1,34 @@
-import { useState,useEffect } from "react";
-import ContestD from "../../../../../artifacts/contracts/ContestD.sol/ContestD.json";
-
-
+import { useState, useEffect } from "react"
+import ContestD from "../../../../../artifacts/contracts/ContestD.sol/ContestD.json"
+import { ethers } from "ethers"
 const ContestCreator = () => {
+  const [startTime, setStartTime] = useState<string>("")
+  const [duration, setDuration] = useState<Number>(1)
+  const [contestName, setContestName] = useState<string>("")
+  const createContest = async () => {
+    try {
+      const { ethereum } = window
 
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum as any)
+        const signer = provider.getSigner()
+        const contract = new ethers.Contract(
+          process.env.REACT_APP_STREAM_ADDRESS || "",
+          ContestD.abi,
+          signer
+        )
+
+        const contest = await contract.createContest(
+          startTime,
+          duration,
+          contestName
+        )
+        console.log("Contest created")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -16,8 +41,10 @@ const ContestCreator = () => {
           >
             ✕
           </label>
-          <h3 className='text-lg font-bold'>Create Contest</h3>
-          <p className='py-4'>Contest creator</p>
+          <div className='w-full flex flex-col'>
+            <div className='w-full flex justify-center'></div>
+            <button className='btn'>Create Contest</button>
+          </div>
         </div>
       </div>
     </>
