@@ -41,6 +41,9 @@ const Navbar: FC = () => {
             <label htmlFor='streamVideo' className='btn m-2 bg-black'>
               Stream Video
             </label>
+            <label htmlFor='createContest' className='btn m-2 bg-black'>
+              Create Contest
+            </label>
 
             {/* end here */}
           </div>

@@ -9,6 +9,7 @@ import { useLocation } from "react-router-dom"
 import UploadVideo from "../../components/Modal/Uploader/UploadVideo"
 import StreamFeed from "../../components/Feed/StreamFeed"
 import StreamVideo from "../../components/Modal/Streamer/StreamVideo"
+import CreateContest from "../../components/Modal/ContestCreator/ContestCreator"
 const Home = () => {
   const [currentFeed, setCurrentFeed] = useState<String>("Video")
 
@@ -56,6 +57,7 @@ const Home = () => {
         {/* Modals here */}
         <UploadVideo />
         <StreamVideo />
+        <CreateContest />
       </div>
     </>
   )

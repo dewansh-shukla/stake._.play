@@ -3,6 +3,7 @@ import { FC, useState, useEffect, useCallback } from "react"
 import { ethers } from "ethers"
 import ContractAbi from "../../utils/contractABI.json"
 import { ImCopy } from "react-icons/im"
+import { FaDonate } from "react-icons/fa"
 interface PlaybackInfo {
   0: string
   1: string
@@ -59,12 +60,17 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
           playbackId={(playbackInfo as any)?.key}
           showPipButton
         />
-        <div className='flex w-full justify-end pr-2 mt-2 '>
+        <div className='flex w-full justify-between items-center mr-2 mt-2 px-8'>
+          <label htmlFor='showDonations' className='flex items-center btn'>
+            Show Donations <FaDonate className='ml-3' />
+          </label>
+          <ShowDonations playbackId={(playbackInfo as any)?.key} />
           <p
-            className='btn flex full justify-end mt-2 mb-2 tooltip mr-6'
+            className='btn flex full justify-end mt-2 mb-2 tooltip '
             data-tip={(playbackInfo as any)?.creator.slice(0, 20)}
           >
-            {(playbackInfo as any)?.creator.slice(0, 12) + "..."}
+            Creator:
+            {(playbackInfo as any)?.creator.slice(0, 12) + `...`}
             <ImCopy
               className='font-white'
               onClick={() =>
@@ -113,3 +119,66 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
   )
 }
 export default VideoPlayer
+
+interface DonationProps {
+  playbackId: string
+}
+
+const ShowDonations: FC<DonationProps> = ({ playbackId }) => {
+  const [allDonations, setAllDonations] = useState<any>()
+  console.log("all donations", allDonations)
+  const getDonations = async () => {
+    try {
+      const { ethereum } = window
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum as any)
+        const signer = provider.getSigner()
+        const contract = new ethers.Contract(
+          process.env.REACT_APP_STREAM_ADDRESS || "",
+          ContractAbi.abi,
+          signer
+        )
+        const donations = await contract.getDonations(playbackId)
+        setAllDonations(donations)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getDonations()
+  }, [])
+  return (
+    <>
+      <input type='checkbox' id='showDonations' className='modal-toggle' />
+      <div className='modal'>
+        <div className='modal-box relative'>
+          <label
+            htmlFor='showDonations'
+            className='btn btn-sm btn-circle absolute right-2 top-2'
+          >
+            ✕
+          </label>
+          <h3 className='text-lg font-bold'>Donations</h3>
+          <p className='py-4'>
+            {allDonations ? (
+              allDonations.map((item: any, index: any) => {
+                return (
+                  <>
+                    <div>
+                      {((item as any)?.amount / Math.pow(10, 18))?.toString()}
+                    </div>
+                  </>
+                )
+              })
+            ) : (
+              <>"No Donations"</>
+            )}
+          </p>
+        </div>
+      </div>
+    </>
+  )
+}
