@@ -167,7 +167,24 @@ const ShowDonations: FC<DonationProps> = ({ playbackId }) => {
               allDonations.map((item: any, index: any) => {
                 return (
                   <>
-                    <div>
+                    <div className='flex justify-center items-center'>
+                      <div>
+                        <p
+                          className='btn flex full justify-end mt-2 mb-2 tooltip '
+                          data-tip={(item as any)?.client.slice(0, 20)}
+                        >
+                          Donor:
+                          {(item as any)?.client.slice(0, 12) + `...`}
+                          <ImCopy
+                            className='font-white'
+                            onClick={() =>
+                              navigator.clipboard.writeText(
+                                (item as any)?.client
+                              )
+                            }
+                          />
+                        </p>
+                      </div>
                       {((item as any)?.amount / Math.pow(10, 18))?.toString()}
                     </div>
                   </>
