@@ -4,6 +4,7 @@ import { ethers } from "ethers"
 import ContractAbi from "../../utils/contractABI.json"
 import { ImCopy } from "react-icons/im"
 import { FaDonate } from "react-icons/fa"
+import { BsCurrencyDollar } from "react-icons/bs"
 interface PlaybackInfo {
   0: string
   1: string
@@ -185,7 +186,15 @@ const ShowDonations: FC<DonationProps> = ({ playbackId }) => {
                           />
                         </p>
                       </div>
-                      {((item as any)?.amount / Math.pow(10, 18))?.toString()}
+                      <p className='m-2 flex items-center'>
+                        <BsCurrencyDollar />
+                        <span>
+                          {(
+                            (item as any)?.amount / Math.pow(10, 18)
+                          )?.toString()}
+                        </span>
+                      </p>
+                      <p className='m-2'>{(item as any)?.message}</p>
                     </div>
                   </>
                 )
