@@ -33,7 +33,7 @@ contract ContestD {
         contestVideos[contestName].push(playbackId);
     }
 
-    function getVideosInContest(string calldata contestName) public view returns(string[] memorgti y) {
+    function getVideosInContest(string calldata contestName) public view returns(string[] memory) {
         return contestVideos[contestName];
     } 
     
