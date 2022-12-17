@@ -22,12 +22,7 @@ const Feed = () => {
           contractABI.abi,
           signer
         )
-        const userVideos = await contract.getAllVideosOfCreator(
-          "0xAB7F2A5b0BA85bc882C7b7f651A106d7F80cb8c3"
-        )
-        console.log("User Videos", userVideos)
         const videos = await contract.getRegularVideos()
-        console.log(videos)
         setAllVideos(videos)
       }
     } catch (err) {

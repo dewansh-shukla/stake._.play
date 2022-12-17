@@ -10,6 +10,7 @@ import UploadVideo from "../../components/Modal/Uploader/UploadVideo"
 import StreamFeed from "../../components/Feed/StreamFeed"
 import StreamVideo from "../../components/Modal/Streamer/StreamVideo"
 import CreateContest from "../../components/Modal/ContestCreator/ContestCreator"
+import Contests from "../../components/Feed/Contest"
 const Home = () => {
   const [currentFeed, setCurrentFeed] = useState<String>("Video")
 
@@ -46,9 +47,19 @@ const Home = () => {
                   >
                     Stream Feed
                   </a>
+                  <a
+                    onClick={() => setCurrentFeed("Contest")}
+                    className={`tab ${
+                      currentFeed === "Contest" ? "tab-active" : ""
+                    }`}
+                  >
+                    Contests
+                  </a>
                 </div>
               </div>
-              {currentFeed === "Video" ? <VideoFeed /> : <StreamFeed />}
+              {(currentFeed === "Video" && <VideoFeed />) ||
+                (currentFeed === "Stream" && <StreamFeed />) ||
+                (currentFeed === "Contest" && <Contests />)}
             </div>
           ) : (
             <Profile />
@@ -57,7 +68,7 @@ const Home = () => {
         {/* Modals here */}
         <UploadVideo />
         <StreamVideo />
-        {/* <CreateContest /> */}
+        <CreateContest />
       </div>
     </>
   )

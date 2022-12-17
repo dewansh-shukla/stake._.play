@@ -5,6 +5,7 @@ import ContractAbi from "../../utils/contractABI.json"
 import { ImCopy } from "react-icons/im"
 import { FaDonate } from "react-icons/fa"
 import { BsCurrencyDollar } from "react-icons/bs"
+import { FiRefreshCcw } from "react-icons/fi"
 interface PlaybackInfo {
   0: string
   1: string
@@ -19,6 +20,7 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
   const [comment, setComment] = useState<string>("")
   const [allDonations, setAllDonations] = useState<any>()
 
+  const [refresh, setRefresh] = useState<boolean>(false)
   const getDonations = async () => {
     try {
       const { ethereum } = window
@@ -31,16 +33,12 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
           ContractAbi.abi,
           signer
         )
-        
-        console.log((playbackInfo as any)?.key);
+
         const donations = await contract.getDonations(
           (playbackInfo as any)?.key
         )
-        console.log(donations);
-
 
         setAllDonations(donations)
-        console.log("allDonations",allDonations);
       }
     } catch (error) {
       console.log(error)
@@ -86,7 +84,8 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
 
   useEffect(() => {
     getDonations()
-  }, [])
+  }, [refresh])
+
   return (
     <>
       <div className='w-full mt-4 mb-4 flex flex-col justify-center border-2  border-violet-500 rounded-b-2xl '>
@@ -148,18 +147,25 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
           {/* Show Donations  */}
           <div className='collapse'>
             <input type='checkbox' className='peer' />
-            <div className='collapse-title btn text-primary-content'>
+            <div className='collapse-title  btn text-primary-content text-center'>
               Show Donations
             </div>
+
             <div className='collapse-content  text-primary-content '>
-              <h3 className='text-lg font-bold'>Donations</h3>
+              <div
+                className='flex w-full justify-center mt-2 items-center'
+                onClick={() => setRefresh(!refresh)}
+              >
+                Refresh
+                <FiRefreshCcw className='ml-2 mt-1' />
+              </div>
               <p className='py-4'>
                 {allDonations ? (
                   allDonations.map((item: any, index: any) => {
                     return (
                       <>
                         <div className='flex justify-center items-center'>
-                          <div>
+                          <div className='flex justify-center'>
                             <p
                               className='btn flex full justify-end mt-2 mb-2 tooltip '
                               data-tip={(item as any)?.client.slice(0, 20)}
