@@ -16,7 +16,6 @@ const Home = () => {
   return (
     <>
       <div className='flex flex-col w-full h-screen items-center justify-center'>
-        <h1 className=''>Platform for</h1>
         <h1 className='text-4xl mb-6 h-10 font-serif font-bold mt-10'>
           <Typewriter
             options={{

@@ -107,5 +107,7 @@ contract ContestD {
                 user.transfer(winnersAmount);
             }
         }
+
+        delete allContestsDonations[cont.name];
     }
 }

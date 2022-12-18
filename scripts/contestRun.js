@@ -31,6 +31,8 @@ const main = async () => {
     console.log("Address 2 Balance:", await hre.ethers.provider.getBalance(addr2.address));
     console.log("Address 3 Balance:", await hre.ethers.provider.getBalance(addr3.address));
 
+    txn = await contestContract.getVideosInContest("cona");
+    console.log("Videos in contest", txn);
 
     txn = await contestContract.addVideosInContest("a","cona");
 
