@@ -8,6 +8,11 @@ import { publicProvider } from "wagmi/providers/public"
 //react router imports
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
+//lens imports
+import { LensConfig, LensProvider, staging } from "@lens-protocol/react"
+import { localStorage } from "@lens-protocol/react/web"
+import { bindings as wagmiBindings } from "@lens-protocol/wagmi"
+
 //livepeer imports
 import {
   createReactClient,

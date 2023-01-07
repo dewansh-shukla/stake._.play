@@ -140,7 +140,7 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
     <>
       <div className='w-full mt-4 mb-4 flex flex-col justify-center border-2 items-center border-violet-500 rounded-b-2xl '>
         <Player
-          title='Video title'
+          title='Demo'
           playbackId={(playbackInfo as any)?.key}
           showPipButton
         />

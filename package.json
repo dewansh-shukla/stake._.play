@@ -22,5 +22,8 @@
   "scripts": {
     "deploy": "npx hardhat run ./scripts/deploy.js --network mumbai",
     "deploy contestContract": "npx hardhat run ./scripts/deployContest.js --network mumbai"
+  },
+  "dependencies": {
+    "@lens-protocol/react": "^0.1.1"
   }
 }

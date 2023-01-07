@@ -10,6 +10,7 @@ import StreamFeed from "../../components/Feed/StreamFeed"
 import StreamVideo from "../../components/Modal/Streamer/StreamVideo"
 import CreateContest from "../../components/Modal/ContestCreator/ContestCreator"
 import Contests from "../../components/Feed/Contest"
+import Profile from "../../components/Profile/Profile"
 const Home = () => {
   const [currentFeed, setCurrentFeed] = useState<String>("Video")
 
@@ -24,7 +25,7 @@ const Home = () => {
   return (
     <>
       <div>
-        <Navbar />
+        <Navbar setCurrentFeed={setCurrentFeed} />
         <Layout>
           <div className='w-full flex  flex-col  mt-2'>
             <div className='w-full flex justify-center'>
@@ -57,7 +58,8 @@ const Home = () => {
             </div>
             {(currentFeed === "Video" && <VideoFeed />) ||
               (currentFeed === "Stream" && <StreamFeed />) ||
-              (currentFeed === "Contest" && <Contests />)}
+              (currentFeed === "Contest" && <Contests />) ||
+              (currentFeed === "Profile" && <Profile />)}
           </div>
           <Outlet />
         </Layout>
