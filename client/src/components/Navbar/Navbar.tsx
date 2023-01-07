@@ -48,6 +48,7 @@ const Navbar: FC<Props> = ({ setCurrentFeed }) => {
             <label htmlFor='createContest' className='btn m-2 bg-black'>
               Create Contest
             </label>
+            {/* NFt minting */}
             <div
               className='avatar hover:cursor-pointer hover:scale-105'
               onClick={() => setCurrentFeed("Profile")}
