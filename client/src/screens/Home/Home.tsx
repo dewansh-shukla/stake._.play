@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
-import { useNavigate } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import Layout from "../../components/Layout/Layout"
 import VideoFeed from "../../components/Feed/VideoFeed"
-import Profile from "../Profile/Profile"
 import Navbar from "../../components/Navbar/Navbar"
 import { useLocation } from "react-router-dom"
 import UploadVideo from "../../components/Modal/Uploader/UploadVideo"
@@ -27,43 +26,40 @@ const Home = () => {
       <div>
         <Navbar />
         <Layout>
-          {location.pathname === "/home" ? (
-            <div className='w-full flex  flex-col  justify-center mt-2'>
-              <div className='w-full flex justify-center'>
-                <div className='tabs tabs-boxed  flex justify-center '>
-                  <a
-                    onClick={() => setCurrentFeed("Video")}
-                    className={`tab ${
-                      currentFeed === "Video" ? "tab-active" : ""
-                    }`}
-                  >
-                    Video Feed
-                  </a>
-                  <a
-                    onClick={() => setCurrentFeed("Stream")}
-                    className={`tab ${
-                      currentFeed === "Stream" ? "tab-active" : ""
-                    }`}
-                  >
-                    Stream Feed
-                  </a>
-                  <a
-                    onClick={() => setCurrentFeed("Contest")}
-                    className={`tab ${
-                      currentFeed === "Contest" ? "tab-active" : ""
-                    }`}
-                  >
-                    Contests
-                  </a>
-                </div>
+          <div className='w-full flex  flex-col  mt-2'>
+            <div className='w-full flex justify-center'>
+              <div className='tabs tabs-boxed  flex justify-center '>
+                <a
+                  onClick={() => setCurrentFeed("Video")}
+                  className={`tab ${
+                    currentFeed === "Video" ? "tab-active" : ""
+                  }`}
+                >
+                  Video Feed
+                </a>
+                <a
+                  onClick={() => setCurrentFeed("Stream")}
+                  className={`tab ${
+                    currentFeed === "Stream" ? "tab-active" : ""
+                  }`}
+                >
+                  Stream Feed
+                </a>
+                <a
+                  onClick={() => setCurrentFeed("Contest")}
+                  className={`tab ${
+                    currentFeed === "Contest" ? "tab-active" : ""
+                  }`}
+                >
+                  Contests
+                </a>
               </div>
-              {(currentFeed === "Video" && <VideoFeed />) ||
-                (currentFeed === "Stream" && <StreamFeed />) ||
-                (currentFeed === "Contest" && <Contests />)}
             </div>
-          ) : (
-            <Profile />
-          )}
+            {(currentFeed === "Video" && <VideoFeed />) ||
+              (currentFeed === "Stream" && <StreamFeed />) ||
+              (currentFeed === "Contest" && <Contests />)}
+          </div>
+          <Outlet />
         </Layout>
         {/* Modals here */}
         <UploadVideo />

@@ -18,7 +18,7 @@ import {
 //screens imports
 import Landing from "./screens/Landing/Landing"
 import Home from "./screens/Home/Home"
-import Profile from "./screens/Profile/Profile"
+import Post from "./components/Post/Post"
 
 const router = createBrowserRouter([
   {
@@ -28,10 +28,12 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <Home />,
-  },
-  {
-    path: "/profile/:id",
-    element: <Profile />,
+    children: [
+      {
+        path: "post/:id",
+        element: <Post />,
+      },
+    ],
   },
 ])
 const App = () => {

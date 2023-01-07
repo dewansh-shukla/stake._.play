@@ -3,11 +3,11 @@ import { FC, useState, useEffect, useCallback } from "react"
 import { ethers } from "ethers"
 import ContractAbi from "../../utils/contractABI.json"
 import { ImCopy } from "react-icons/im"
-import { FaDonate } from "react-icons/fa"
 import { BsCurrencyDollar } from "react-icons/bs"
 import { FiRefreshCcw } from "react-icons/fi"
 import ContestD from "../../utils/contestABI.json"
 import PrayingFrog from "../../assets/images/PrayingFrog.png"
+import { Link } from "react-router-dom"
 interface PlaybackInfo {
   0: string
   1: string
@@ -138,7 +138,7 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
   }
   return (
     <>
-      <div className='w-full mt-4 mb-4 flex flex-col justify-center border-2  border-violet-500 rounded-b-2xl '>
+      <div className='w-full mt-4 mb-4 flex flex-col justify-center border-2 items-center border-violet-500 rounded-b-2xl '>
         <Player
           title='Video title'
           playbackId={(playbackInfo as any)?.key}
@@ -276,6 +276,11 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
             </div>
           </div>
         </div>
+
+        {/* Redirection to specific post page */}
+        {/* <Link className='btn' to={`post/:${(playbackInfo as any)?.key}`}>
+          Open Video
+        </Link> */}
       </div>
     </>
   )
