@@ -277,7 +277,7 @@ const VideoPlayer: FC<Props> = ({ playbackInfo }) => {
           </div>
         </div>
 
-        {/* Redirection to specific post page */}
+        {/* Redirection to specific video page */}
         {/* <Link className='btn' to={`post/:${(playbackInfo as any)?.key}`}>
           Open Video
         </Link> */}
